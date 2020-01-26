@@ -12,7 +12,7 @@ module.exports = (env) => {
     const baseCfg = {
         entry: resolve(__dirname, "..", "./src/main.js"),//唯一入口文件
         output: {//输出目录
-            path: resolve(__dirname, "..","./dist"),
+            path: resolve(__dirname, "..","./"),
             filename: 'bundle.js'
         },
         plugins: [new HtmlWebpackPlugin({
