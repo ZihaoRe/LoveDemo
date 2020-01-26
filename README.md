@@ -1,2 +1,2 @@
-# LoveDemo
-This website is built for testing, would be refactor in future 
+# Demo
+https://github.com/ZihaoRe/ZihaoRe.github.io

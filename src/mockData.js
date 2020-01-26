@@ -1,4 +1,4 @@
-var data = [
+module.exports = [
     {
         img:'1.jpg',
         title:'猪',

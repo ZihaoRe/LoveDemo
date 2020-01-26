@@ -1,6 +1,9 @@
+const mockData = require("./mockData");
+require('../css/gallery.css');
+
 function turns(elem) {
-    var name = elem.className;
-    var index = elem.id.split('_')[1];
+    let name = elem.className;
+    let index = elem.id.split('_')[1];
 
     if (!/photo_center/.test(name)) {
         return sort(index);
@@ -22,27 +25,36 @@ function turns(elem) {
 
 //selector function
 function select(elem) {
-    var method = elem.substr(0,1) == '.' ? 'getElementsByClassName' : 'getElementById';
+    let method = elem.substr(0,1) == '.' ? 'getElementsByClassName' : 'getElementById';
     return document[method](elem.substr(1));
 }
 //random number generator function
 function random(range) {
     //TODO:should be optimized
-    var max = Math.max(range[0],range[1]);
-    var min = Math.min(range[0],range[1]);
-    var diff = max - min;
-    var res = Math.ceil(diff * Math.random() + min);
+    let max = Math.max(range[0],range[1]);
+    let min = Math.min(range[0],range[1]);
+    let diff = max - min;
+    let res = Math.ceil(diff * Math.random() + min);
     return res;
 }
 
-var mockData = data;
-
 function init() {
-    var template = select('#wrap').innerHTML;
-    var html = [];
-    var nav = [];
-    for (var i = 0; i<mockData.length;i++) {
-        var _html = template
+    let template =
+        '<div class="photo photo_center photo_front" id="{{photo_id}}">\n' +
+            '<div class="photo-wrap">' + //used for reversing
+                '<div class="side side-front">\n' +
+                    '<p class="img"><img src="img/{{img}}"></p>' +
+                    '<p class="title">{{title}}</p>' +
+                '</div>\n' +
+                '<div class="side side-back">' +
+                    '<p class="desc">{{desc}}</p>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    let html = [];
+    let nav = [];
+    for (let i = 0; i<mockData.length;i++) {
+        let _html = template
             .replace('{{photo_id}}', 'photo_'+i)
             .replace('{{img}}',mockData[i].img)
             .replace('{{title}}',mockData[i].title)
@@ -52,22 +64,35 @@ function init() {
     }
     html.push('<div class="nav">'+nav.join('')+'</div>')
     select('#wrap').innerHTML = html.join('');
-    var center= random([0,mockData.length-1]);
+    document.getElementById("wrap").addEventListener("click", function(e){
+        let target = e.target;
+        while(target !== document.getElementById("wrap") ){
+            if(target.tagName.toLowerCase() === 'div' && (target.className.indexOf("photo_center") !== -1 || target.className.indexOf("photo_front") !== -1 || target.className.indexOf("photo_back") !== -1)){
+                turns(target);
+                break;
+            } else if (target.tagName.toLowerCase() === 'span' && target.className.indexOf("i") !== -1) {
+                let _id = target.id.replace("nav_", "");
+                turns(select('#photo_'+_id));
+            }
+            target = target.parentNode;
+        }
+    });
+    let center= random([0,mockData.length-1]);
     sort(center);
 }
 
 init();
 
 function range() {
-    var range = {
+    let range = {
         left:{x:[],y:[]},
         right:{x:[],y:[]}
     };
-    var wrap = {
+    let wrap = {
         width: select('#wrap').clientWidth,
         height: select('#wrap').clientHeight
     };
-    var photo = {
+    let photo = {
         width: select('.photo')[0].clientWidth,
         height: select('.photo')[0].clientHeight
     }
@@ -84,9 +109,9 @@ function range() {
 }
 
 function sort(index) {
-    var _elem = select('.photo');
-    var photos = [];
-    for (var i = 0;i<_elem.length;i++) {
+    let _elem = select('.photo');
+    let photos = [];
+    for (let i = 0;i<_elem.length;i++) {
         //remove old style when sorted again
         _elem[i].className = _elem[i].className.replace(/\s*photo_center\s*/, ' ');
         _elem[i].className = _elem[i].className.replace(/\s*photo_back\s*/, ' ');
@@ -99,31 +124,31 @@ function sort(index) {
 
         photos.push(_elem[i]);
     }
-    var photo_center = select('#photo_'+index);
+    let photo_center = select('#photo_'+index);
     photo_center.className += ' photo_center ';
     photos.splice(index,1);
 
     //divide into two parts
-    var photos_left = photos.splice(0,Math.ceil(photos.length/2));
-    var photos_right = photos;
+    let photos_left = photos.splice(0,Math.ceil(photos.length/2));
+    let photos_right = photos;
 
-    var _range = range();
+    let _range = range();
 
-    for (i=0;i<photos_left.length;i++) {
+    for (let i=0;i<photos_left.length;i++) {
         photos_left[i].style.left = random(_range.left.x) + 'px';
         photos_left[i].style.top = random(_range.left.y) + 'px';
         photos_left[i].style['transform'] = photos_left[i].style['-webkit-transform'] = 'rotate('+random([-180,180])+'deg) scale(1)';
     }
 
-    for (i=0;i<photos_right.length;i++) {
+    for (let i=0;i<photos_right.length;i++) {
         photos_right[i].style.left = random(_range.right.x) + 'px';
         photos_right[i].style.top = random(_range.right.y) + 'px';
         photos_right[i].style['transform'] = photos_right[i].style['-webkit-transform'] ='rotate('+random([-180,180])+'deg) scale(1)';
     }
 
     //switch controller
-    var navs = select('.i');
-    for (i=0;i<navs.length;i++) {
+    let navs = select('.i');
+    for (let i=0;i<navs.length;i++) {
         navs[i].className = navs[i].className.replace(/\s*i_current\s*/,' ');
         navs[i].className = navs[i].className.replace(/\s*i_back\s*/,' ');
     }
