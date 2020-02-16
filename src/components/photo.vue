@@ -1,5 +1,5 @@
 <template>
-    <div class="photo photo_center photo_front" :id="`photo_${index}`" @click="turns">
+    <div class="photo photo_center photo_front" :id="`photo_${index}`" @click="turns()">
         <div class="photo-wrap"><!--used for reversing-->
             <div class="side side-front">
                 <p class="img"><img :src="`img/${photoInfo.img}`"></p>
@@ -12,21 +12,25 @@
     </div>
 </template>
 <script>
+    import {Bus} from "../main";
     export default {
-        provide(){
-            return { photo: this}
-        },
         name: "photo",
         props: ["index", "photoInfo"],
         inject:['album'],
-        data() {
+        data: function (){
             return {
 
             };
         },
+        mounted: function (){
+            let that = this;
+            Bus.$on("turnsByIndex", function (index) {
+                that.turns(index);
+            })
+        },
         methods: {
-            turns: function () {
-                let elem = this.$el;
+            turns: function (id) {
+                let elem = id !== undefined? document.getElementById(`photo_${id}`) : this.$el;
                 let name = elem.className;
                 let index = elem.id.split('_')[1];
 

@@ -11,7 +11,7 @@
     import photo from "./photo.vue";
     import index from "./index.vue";
     export default {
-        provide(){
+        provide: function (){
             return {album: this}
         },
         props: ["photos"],
@@ -19,7 +19,7 @@
             photo,
             index
         },
-        data() {
+        data: function () {
             return {
 
             };

@@ -9,7 +9,7 @@
         components: {
             Album
         },
-        data() {
+        data: function () {
             return {
                 photoList: mockData
             };
