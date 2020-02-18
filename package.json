@@ -2,7 +2,6 @@
   "name": "zihaore.github.io",
   "version": "1.0.0",
   "description": "test",
-  "main": "src/index.html",
   "scripts": {
     "build": "webpack --config ./build/webpack.base.conf.js --env.production",
     "dev": "webpack-dev-server --config ./build/webpack.base.conf.js --env.development",
@@ -19,6 +18,9 @@
     "css-loader": "^3.4.2",
     "html-webpack-plugin": "^3.2.0",
     "style-loader": "^1.1.3",
+    "vue": "^2.6.11",
+    "vue-loader": "^15.9.0",
+    "vue-template-compiler": "^2.6.11",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.1",
