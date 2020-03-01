@@ -9,6 +9,9 @@
         components: {
             Album
         },
+        mounted: function () {
+            console.log(this.$store)
+        },
         data: function () {
             return {
                 photoList: mockData

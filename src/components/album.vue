@@ -1,7 +1,7 @@
 <template>
     <div>
         <template v-for="(photo, index) in photos">
-            <photo :photo-info="photo" :key="`photo_${index}`" :index="`${index}`"></photo>
+            <photo :photo-info="photo" :key="`${photo.img}`" :index="index"></photo>
         </template>
         <index :list="photos" class="nav"></index>
     </div>

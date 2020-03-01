@@ -3,7 +3,7 @@ const buildCfg = require("./webpack.build.conf");
 const devCfg = require("./webpack.dev.conf");
 const merge = require("webpack-merge");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 let resolve = (...params) => {
     return path.resolve(...params);
@@ -11,7 +11,9 @@ let resolve = (...params) => {
 module.exports = (env) => {
     const isDev = env.development;
     const baseCfg = {
-        entry: resolve(__dirname, "..", "./src/main.js"),//唯一入口文件
+        entry: {
+            app: ["babel-polyfill", resolve(__dirname, "..", "./src/main.js")]
+        },
         output: {//输出目录
             path: resolve(__dirname, "..","./"),
             filename: 'bundle.js'
@@ -26,6 +28,14 @@ module.exports = (env) => {
         })],
         module: {
             rules: [{
+                test:/\.js/, // 匹配js 使用babel-loader 进行转义
+                use:{
+                    loader:'babel-loader', // 默认回调用@babel/core
+                    options:{
+                        presets:['@babel/preset-env']
+                    }
+                }
+            },{
                 test: /\.vue$/,
                 loader: 'vue-loader'
             },{
