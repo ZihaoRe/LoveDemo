@@ -1,5 +1,5 @@
 <template>
-    <div class="photo photo_center photo_front" :id="`photo_${index}`" @click="turns()">
+    <div class="photo photo_center photo_front" :id="`photo_${index}`" @click="select()">
         <div class="photo-wrap"><!--used for reversing-->
             <div class="side side-front">
                 <p class="img"><img :src="`img/${photoInfo.img}`"></p>
@@ -25,18 +25,20 @@
         mounted: function (){
             let that = this;
             Bus.$on("turnsByIndex", function (index) {
-                that.turns(index);
+                if (index === that.index) {
+                    that.turns();
+                }
             })
         },
         methods: {
-            turns: function (id) {
-                let elem = id !== undefined? document.getElementById(`photo_${id}`) : this.$el;
+            select: function () {
+                this.$store.commit("setSelected", this.index);
+                this.turns();
+            },
+            turns: function () {
+                let elem = this.$el;
                 let name = elem.className;
                 let index = elem.id.split('_')[1];
-
-                if (!/photo_center/.test(name)) {
-                    return this.album.sort(index);
-                }
 
                 if (/photo_front/.test(name)) {
                     name = name.replace(/photo_front/,'photo_back');

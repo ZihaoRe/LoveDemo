@@ -17,6 +17,7 @@
         },
         methods: {
             turnsByIndex: function (index) {
+                this.$store.commit("setSelected", index);
                 Bus.$emit("turnsByIndex", index);
             }
         }

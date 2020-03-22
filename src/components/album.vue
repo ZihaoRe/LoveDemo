@@ -24,13 +24,21 @@
 
             };
         },
+        computed:{
+            selected: function () {
+                return this.$store.state.selectedPhoto;
+            }
+        },
+        watch: {
+            selected: function (newVal) {
+                this.sort(newVal);
+            }
+        },
         mounted: function () {
-            let center= this.random([0,this.photos.length-1]);
-            this.sort(center);
+            this.$store.commit("random", [0,this.photos.length-1]);
         },
         updated: function () {
-            let center= this.random([0,this.photos.length-1]);
-            this.sort(center);
+            this.$store.commit("random", [0,this.photos.length-1]);
         },
         methods: {
             select: function(elem) {
@@ -38,7 +46,6 @@
                 return document[method](elem.substr(1));
             },
             random: function (range) {
-                //TODO:should be optimized
                 let max = Math.max(range[0],range[1]);
                 let min = Math.min(range[0],range[1]);
                 let diff = max - min;
